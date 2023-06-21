@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Pizza</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+   <h1>Perfect Pizza</h1>
+   
+   <div x-data="pizzaCart()">
+       <section class="cart" x-show="cartItems.length > 0">
+           <h2>
+            <i class="fas fa-shopping-cart"></i>
+            Your Cart</h2>
+           <ul>
+               <template x-for="item in cartItems" :key="item.id">
+                   <li>
+                       <span x-text="item.size"></span>
+                       <button @click="removeFromCart(item)">Remove</button>
+                   </li>
+               </template>
+           </ul>
+           <div class="totals">
+               <div>
+                   <span>Small:</span>
+                   <span x-text="smallTotal"></span>
+               </div>
+               <div>
+                   <span>Medium:</span>
+                   <span x-text="mediumTotal"></span>
+               </div>
+               <div>
+                   <span>Large:</span>
+                   <span x-text="largeTotal"></span>
+               </div>
+               <div>
+                   <span>Total Cost:</span>
+                   <span x-text="totalCost"></span>
+               </div>
+               <div>
+                   <label for="paymentAmount">Payment Amount:</label>
+                   <input type="number" id="paymentAmount" x-model="paymentAmount">
+               </div>
+               <button @click="checkout">Check Out</button>
+           </div>
+       </section>
+
+       <div class="message" x-show="message !== ''" x-text="message" x-init="startTimer"></div>
+    
+       
+       <section class="pizza">
+           <div class="pizza small_pizza">
+               <div class="heading">
+                   <h2>Small Pizza</h2>
+                   <h3>R49.99</h3>
+               </div>
+               <div class="photo">
+                   <img src="images/pizza.png" width="100px">
+               </div>
+               <div class="content">
+                   <div>Small Pizza for only R49.99</div>
+                   <button @click="addToCart('small')">Order</button>
+               </div>
+           </div>
+           <div class="pizza medium_pizza">
+               <div class="heading">
+                   <h2>Medium Pizza</h2>
+                   <h3>R79.99</h3>
+               </div>
+               <div class="photo">
+                   <img src="images/pizza-box.png" width="150px">
+               </div>
+               <div class="content">
+                   <div>Medium Pizza for only R79.99</div>
+                   <button @click="addToCart('medium')">Order</button>
+               </div>
+           </div>
+           <div class="pizza large_pizza">
+               <div class="heading">
+                   <h2>Large Pizza</h2>
+                   <h3>R169.99</h3>
+               </div>
+               <div class="photo">
+                   <img src="images/pizza (1).png" width="200">
+               </div>
+               <div class="content">
+                   <div>Large Pizza for only R169.99</div>
+                   <button @click="addToCart('large')">Order</button>
+               </div>
+           </div>
+       </section>
+   
+       <div class="pizza contact">
+           <div class="heading">
+               <h2>Contact details</h2>
+               <h3>contact us: 012 875 5412</h3>
+               <h4>www.perfectpizza.co.za</h4>
+               <h4>@perfectpizza</h4>
+           </div>
+           <div class="content">
+               <div class="photo">
+                   <img src="images/pizza-deliver.png" width="200">
+               </div>
+               We also deliver straight to your door
+           </div>
+       </div>
+   
+   </div>
+   
+   <script>
+       function pizzaCart() {
+           return {
+               cartItems: [],
+               smallTotal: 0,
+               mediumTotal: 0,
+               largeTotal: 0,
+               totalCost: 0,
+               message: '',
+               paymentAmount: 0,
+
+               pricePerPizza: {
+                   small: 49.99,
+                   medium: 79.99,
+                   large: 169.99
+               },
+               addToCart(size) {
+                   this.cartItems.push({ id: Math.random(), size });
+                   this.updateTotals();
+               },
+               removeFromCart(item) {
+                   this.cartItems = this.cartItems.filter((cartItem) => cartItem.id !== item.id);
+                   this.updateTotals();
+               },
+               updateTotals() {
+                   this.smallTotal = this.cartItems.filter((item) => item.size === 'small').length;
+                   this.mediumTotal = this.cartItems.filter((item) => item.size === 'medium').length;
+                   this.largeTotal = this.cartItems.filter((item) => item.size === 'large').length;
+                   this.totalCost = this.cartItems.reduce((total, item) => total + this.pricePerPizza[item.size], 0);
+               },
+               checkout() {
+                   if (parseFloat(this.paymentAmount) >= this.totalCost) {
+                       this.message = 'Enjoy your pizzas!';
+                       this.cartItems = [];
+                       this.updateTotals();
+                   } else {
+                       this.message = 'Sorry - that is not enough money!';
+                   }
+                   setTimeout(() => {
+                       this.message = '';
+                   }, 3000); // Message disappears after 3 seconds (3000 milliseconds)
+               },
+               startTimer() {
+                   setTimeout(() => {
+                       this.message = '';
+                   }, 3000); // Message disappears after 3 seconds (3000 milliseconds)
+               }
+           };
+       }
+   </script>
+
+</body>
+</html>
+
+
+
+
+
+

@@ -10,21 +10,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-   <h1>Perfect Pizza</h1>
+    <h1 style="text-align: center;">Perfect Pizza</h1>
    
    <div x-data="pizzaCart()">
        <section class="cart" x-show="cartItems.length > 0">
            <h2>
             <i class="fas fa-shopping-cart"></i>
             Your Cart</h2>
-           <ul>
-               <template x-for="item in cartItems" :key="item.id">
-                   <li>
-                       <span x-text="item.size"></span>
-                       <button @click="removeFromCart(item)">Remove</button>
-                   </li>
-               </template>
-           </ul>
+           <table class="cart-table">
+               <thead>
+                   <tr>
+                       <th>Size</th>
+                       <th>Remove</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <template x-for="item in cartItems" :key="item.id">
+                       <tr>
+                           <td x-text="item.size"></td>
+                           <td><button @click="removeFromCart(item)">Remove</button></td>
+                       </tr>
+                   </template>
+               </tbody>
+           </table>
            <div class="totals">
                <div>
                    <span>Small:</span>
@@ -50,7 +58,15 @@
            </div>
        </section>
 
-       <div class="message" x-show="message !== ''" x-text="message" x-init="startTimer"></div>
+       <div class="message" x-show="message !== ''">
+           <span x-show="message === 'Sorry - that is not enough money!'">
+               <i class="fas fa-sad-tear"></i>
+           </span>
+           <span x-show="message === 'Enjoy your pizzas!'">
+               <i class="fas fa-grin-stars"></i>
+           </span>
+           <span x-text="message"></span>
+       </div>
     
        
        <section class="pizza">
@@ -98,16 +114,17 @@
        <div class="pizza contact">
            <div class="heading">
                <h2>Contact details</h2>
-               <h3>contact us: 012 875 5412</h3>
-               <h4>www.perfectpizza.co.za</h4>
-               <h4>@perfectpizza</h4>
+               <p>contact us: 012 875 5412</p>
+               <p>www.perfectpizza.co.za</p4>
+               <p>@perfectpizza</p>
            </div>
-           <div class="content">
-               <div class="photo">
-                   <img src="images/pizza-deliver.png" width="200">
-               </div>
-               We also deliver straight to your door
-           </div>
+           <div class="content" style="text-align: right;">
+            <div class="photo">
+                <img src="images/pizza-deliver.png" width="200">
+            </div>
+            We also deliver straight to your door
+        </div>
+        
        </div>
    
    </div>
@@ -165,6 +182,11 @@
 
 </body>
 </html>
+
+
+
+
+
 
 
 
